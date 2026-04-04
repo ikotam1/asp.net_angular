@@ -24,15 +24,4 @@ public class UserService
             Email = u.Email
         }).ToList();
     }
-
-    public async Task CreateUser(UserDto dto)
-    {
-        var user = new User
-        {
-            Name = dto.Name,
-            Email = dto.Email
-        };
-
-        await _repository.Add(user);
-    }
 }

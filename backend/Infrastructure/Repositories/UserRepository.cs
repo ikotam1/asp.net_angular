@@ -16,14 +16,18 @@ public class UserRepository : IUserRepository
 
     public async Task<List<User>> GetAll()
     {
-        // TODO: NO TRACKING
         return await _context.Users.ToListAsync();
     }
 
-    public async Task Add(User user)
+    public async Task<User?> GetByEmail(string email)
     {
-        // TODO: AUTO MAPPER DTO -> ENTITY
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
+        var user =  await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        return user;
+    }
+
+    public async Task<User?> GetById(Guid id)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        return user;
     }
 }

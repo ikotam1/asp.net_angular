@@ -1,0 +1,86 @@
+using System.Text;
+using Application.DTOs.Request;
+using Application.Interfaces;
+using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Configuration;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+
+namespace Application.Services;
+
+public partial class AuthService
+{
+    private readonly PasswordHasher<User> _passwordHasher;
+
+    private readonly IAuthRepository _repository;
+    private readonly IUserRepository _userRepository;
+    private readonly IConfiguration _configuration;
+
+
+    public AuthService(IAuthRepository repository, IUserRepository userRepository, IConfiguration config)
+    {
+        _repository = repository;
+        _userRepository = userRepository;
+        _configuration = config;
+        _passwordHasher = new();
+    }
+
+    public async Task Register(RegisterRequest dto)
+    {
+        var user = new User
+        {
+            Name = dto.Name,
+            Email = dto.Email
+        };
+
+        user.PasswordHashed = _passwordHasher.HashPassword(user, dto.Password);
+
+        await _repository.Register(user);
+    }
+
+    public async Task<string?> Login(LoginRequest dto)
+    {
+        var user = await _userRepository.GetByEmail(dto.Email);
+
+        if (user == null)
+            return null;
+
+        var result = VerifyPassword(user, dto.Password);
+
+        if (result == PasswordVerificationResult.Failed)
+            return null;
+
+        var token = GenerateJwtToken(user);
+        
+        return token;
+    }
+}
+
+public partial class AuthService
+{
+    private PasswordVerificationResult VerifyPassword(User user, string password)
+        => _passwordHasher.VerifyHashedPassword(user, user.PasswordHashed, password);
+
+    private string GenerateJwtToken(User user)
+    {
+        // TODO: GET KEY FROM CONFIG
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Jwt:Key").Value));
+        var expired = 2;
+        _ = int.TryParse(_configuration.GetSection("Jwt:Expired").Value, out expired);      
+
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var token = new JwtSecurityToken(
+            claims:
+            [
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email)
+            ],
+            expires: DateTime.Now.AddHours(expired),
+            signingCredentials: creds);
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+}

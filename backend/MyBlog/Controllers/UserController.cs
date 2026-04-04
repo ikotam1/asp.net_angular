@@ -21,12 +21,5 @@ namespace MyBlog.Controllers
             var users = await _service.GetUsers();
             return Ok(users);
         }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(UserDto dto)
-        {
-            await _service.CreateUser(dto);
-            return Ok();
-        }
     }
 }
