@@ -1,4 +1,5 @@
 using System;
+using Domain.Enums;
 
 namespace Domain.Entities;
 
@@ -10,6 +11,9 @@ public class User
 
     public string Email { get; set; } = string.Empty;
 
-    // todo check nullable
+    // TODO: check nullable
     public string PasswordHashed { get; set; }
+
+    // TODO: Scaling by policies and permissions
+    public EUserRole Role { get; set; } = EUserRole.User;
 }

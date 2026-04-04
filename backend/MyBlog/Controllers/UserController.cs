@@ -1,5 +1,7 @@
 using Application.DTOs;
 using Application.Services;
+using Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MyBlog.Controllers
@@ -16,6 +18,7 @@ namespace MyBlog.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = nameof(EUserRole.Admin))]
         public async Task<IActionResult> Get()
         {
             var users = await _service.GetUsers();

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using Application.Interfaces;
 using Application.Services;
@@ -37,7 +38,8 @@ builder.Services.AddAuthentication("Bearer")
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(key),
             ValidateIssuer = false,
-            ValidateAudience = false
+            ValidateAudience = false,
+            RoleClaimType = ClaimTypes.Role
         };
     });
 builder.Services.AddAuthorization();

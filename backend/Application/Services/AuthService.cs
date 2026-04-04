@@ -67,8 +67,7 @@ public partial class AuthService
     {
         // TODO: GET KEY FROM CONFIG
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Jwt:Key").Value));
-        var expired = 2;
-        _ = int.TryParse(_configuration.GetSection("Jwt:Expired").Value, out expired);      
+        _ = int.TryParse(_configuration.GetSection("Jwt:Expired").Value, out var expired);      
 
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
@@ -76,7 +75,8 @@ public partial class AuthService
             claims:
             [
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email)
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.Role.ToString())
             ],
             expires: DateTime.Now.AddHours(expired),
             signingCredentials: creds);
