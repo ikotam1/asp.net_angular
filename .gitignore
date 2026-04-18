@@ -487,3 +487,5 @@ $RECYCLE.BIN/
 backend/MyBlog/app.db-wal
 backend/MyBlog/app.db-shm
 backend/MyBlog/app.db
+backend/MyBlog/app.db
+backend/MyBlog/appsettings.Development.json
