@@ -1,4 +1,6 @@
 using System;
+using Microsoft.EntityFrameworkCore;
+using System.Data.SqlClient;
 using Application.Interfaces;
 using Domain.Entities;
 using Infrastructure.Data;
@@ -16,7 +18,6 @@ public class AuthRepository : IAuthRepository
 
     public async Task Register(User user)
     {
-        // TODO: AUTO MAPPER DTO -> ENTITY
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
     }

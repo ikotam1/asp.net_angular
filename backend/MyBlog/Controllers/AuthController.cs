@@ -18,7 +18,9 @@ namespace Api.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterRequest dto)
         {
-            await _service.Register(dto);
+            var result = await _service.Register(dto);
+            if (!result.IsSuccess)
+                return BadRequest(result);
             return Ok();
         }
 

@@ -7,6 +7,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Application.Interfaces.Response;
+using Application.DTOs.Response;
 
 namespace Application.Services;
 
@@ -27,8 +29,14 @@ public partial class AuthService
         _passwordHasher = new();
     }
 
-    public async Task Register(RegisterRequest dto)
+    public async Task<IResult> Register(RegisterRequest dto)
     {
+        // Check if user with email already exists
+        var existingUser = await _userRepository.GetByEmail(dto.Email);
+        if (existingUser != null)
+            return Result.Failure("User with this email already exists");
+
+        //  TODO: USE AUTO MAPPER
         var user = new User
         {
             Name = dto.Name,
@@ -38,6 +46,8 @@ public partial class AuthService
         user.PasswordHashed = _passwordHasher.HashPassword(user, dto.Password);
 
         await _repository.Register(user);
+
+        return Result.Success();
     }
 
     public async Task<string?> Login(LoginRequest dto)
