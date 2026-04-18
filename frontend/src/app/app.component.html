@@ -1,0 +1,51 @@
+<div class="page-layout">
+  <!-- Header/Navbar -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <h1>MyBlog</h1>
+        </div>
+        <nav class="nav navigationButtons">
+          <a *ngFor="let button of navigationButtons" [routerLink]="button.href" class="nav-link">{{ button.label }}</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>MyBlog</h4>
+          <p>A modern platform for sharing and discovering great content.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Follow Us</h4>
+          <ul>
+            <li><a href="#">Twitter</a></li>
+            <li><a href="#">Facebook</a></li>
+            <li><a href="#">LinkedIn</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 MyBlog. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+</div>

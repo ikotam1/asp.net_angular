@@ -1,0 +1,49 @@
+<div class="start-page">
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h2>Welcome to MyBlog</h2>
+        <p>Your platform for sharing ideas and connecting with readers worldwide</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary btn-large">Start Reading</button>
+          <button class="btn btn-secondary btn-large">Start Writing</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <div class="container">
+      <h3 class="section-title">What You Can Do</h3>
+      <div class="features-grid">
+        <div class="feature-card" *ngFor="let feature of features">
+          <div class="feature-icon">{{ feature.icon }}</div>
+          <h4>{{ feature.title }}</h4>
+          <p>{{ feature.description }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent Posts Section -->
+  <section class="recent-posts">
+    <div class="container">
+      <h3 class="section-title">Recent Posts</h3>
+      <div class="posts-grid">
+        <article class="post-card" *ngFor="let i of [1,2,3,4]">
+          <div class="post-header">
+            <span class="post-category">Technology</span>
+          </div>
+          <h4>Interesting Blog Post Title</h4>
+          <p>Discover compelling stories and insights shared by our community of writers...</p>
+          <div class="post-footer">
+            <span class="author">By Author Name</span>
+            <span class="date">2 days ago</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</div>
