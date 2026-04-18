@@ -1,0 +1,39 @@
+# Ignore Git metadata
+.git
+
+# Ignore VS Code and editor config
+.vscode/
+*.code-workspace
+
+# Ignore build artifacts
+bin/
+obj/
+**/bin/
+**/obj/
+
+# Ignore local secrets and environment files
+.env
+*.user
+*.suo
+
+# Ignore Docker Compose and other deployment config not needed for image build
+docker-compose.yml
+
+# Ignore frontend dependencies and build output
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+
+# Ignore SDK and package artifacts
+*.nupkg
+project.assets.json
+**/project.assets.json
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+*/tmp/
+
+# Ignore OS files
+.DS_Store
+Thumbs.db

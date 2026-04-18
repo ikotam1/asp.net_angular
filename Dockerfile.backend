@@ -1,0 +1,32 @@
+# Use the official .NET 8.0 SDK image to build the app
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Copy the solution file and restore dependencies
+COPY ["MyBlog.sln", "."]
+COPY ["backend/Application/Application.csproj", "backend/Application/"]
+COPY ["backend/Domain/Domain.csproj", "backend/Domain/"]
+COPY ["backend/Infrastructure/Infrastructure.csproj", "backend/Infrastructure/"]
+COPY ["backend/MyBlog/Api.csproj", "backend/MyBlog/"]
+
+RUN dotnet restore "backend/MyBlog/Api.csproj"
+
+# Copy everything else and build
+COPY . .
+WORKDIR "/src/backend/MyBlog"
+RUN dotnet build "Api.csproj" -c Release -o /app/build
+
+# Publish the app
+RUN dotnet publish "Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+# Use the official .NET 8.0 runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+WORKDIR /app
+COPY --from=build /app/publish .
+
+# Listen on container port 8080 so compose port mapping works
+ENV ASPNETCORE_URLS=http://+:8080
+EXPOSE 8080
+
+# Run the app
+ENTRYPOINT ["dotnet", "Api.dll"]
