@@ -5,29 +5,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class UserRepository : IUserRepository
+public class UserRepository : CommonRepository<User>, IUserRepository
 {
-    private readonly AppDbContext _context;
-
-    public UserRepository(AppDbContext context)
+    public UserRepository(AppDbContext context) : base(context)
     {
-        _context = context;
-    }
-
-    public async Task<List<User>> GetAll()
-    {
-        return await _context.Users.ToListAsync();
+        //TODO: Refactor to avoid duplicate context
     }
 
     public async Task<User?> GetByEmail(string email)
     {
-        var user =  await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-        return user;
-    }
-
-    public async Task<User?> GetById(Guid id)
-    {
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         return user;
     }
 }

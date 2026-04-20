@@ -2,30 +2,50 @@ using System.Security.Claims;
 using System.Text;
 using Application.Interfaces;
 using Application.Services;
-using Infrastructure.Data;
 using Infrastructure.Repositories;
-using Microsoft.EntityFrameworkCore;
+using Infrastructure;
 using Microsoft.IdentityModel.Tokens;
-using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add Infrastructure services to the container.
+builder.Services.AddInfrastructure(builder.Configuration.GetConnectionString("PostgresConnection")); 
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "Please enter token",
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Scheme = "bearer"
+    });
+    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
-var connectionString =
-    builder.Configuration.GetConnectionString("PostgresConnection")
-        ?? throw new InvalidOperationException("Connection string"
-        + "'PostgresConnection' not found.");
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString));
-
+// TODO: Auto add services and repositories by reflection
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<PostService>();
 
 builder.Services.AddControllers();
 
@@ -50,7 +70,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:4200", "https://localhost:4200")
+        policy.WithOrigins("http://localhost:4200", "*")
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials();

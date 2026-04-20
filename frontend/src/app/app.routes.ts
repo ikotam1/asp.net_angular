@@ -27,7 +27,6 @@ export const routes: Routes = [
     path: 'about',
     component: AboutPageComponent
   },
-  
   {
     path: '**',
     redirectTo: ''

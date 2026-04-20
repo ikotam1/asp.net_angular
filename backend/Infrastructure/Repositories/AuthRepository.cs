@@ -1,24 +1,17 @@
-using System;
-using Microsoft.EntityFrameworkCore;
-using System.Data.SqlClient;
 using Application.Interfaces;
 using Domain.Entities;
 using Infrastructure.Data;
 
 namespace Infrastructure.Repositories;
 
-public class AuthRepository : IAuthRepository
+public class AuthRepository : CommonRepository<User>, IAuthRepository
 {
-    private readonly AppDbContext _context;
-
-    public AuthRepository(AppDbContext context)
+    public AuthRepository(AppDbContext context) : base(context)
     {
-        _context = context;
     }
 
     public async Task Register(User user)
     {
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
+        await AddAsync(user);
     }
 }

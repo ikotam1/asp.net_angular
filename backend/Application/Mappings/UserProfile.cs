@@ -1,14 +1,14 @@
-using Application.DTOs.Request;
-using AutoMapper;
-using Domain.Entities;
+// using Application.DTOs.Request;
+// using AutoMapper;
+// using Domain.Entities;
 
-namespace Application.Mappings;
+// namespace Application.Mappings;
 
-public class UserProfile : Profile
-{
-    public UserProfile()
-    {
-        CreateMap<RegisterRequest, User>()
-            .ForMember(dest => dest.PasswordHashed, opt => opt.Ignore());
-    }
-}
+// public class UserProfile : Profile
+// {
+//     public UserProfile()
+//     {
+//         CreateMap<RegisterRequest, User>()
+//             .ForMember(dest => dest.PasswordHashed, opt => opt.Ignore());
+//     }
+// }

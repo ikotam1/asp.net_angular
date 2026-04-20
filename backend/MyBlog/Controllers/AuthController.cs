@@ -34,5 +34,7 @@ namespace Api.Controllers
 
             return Ok(new { token });
         }
+
+        // TODO LOGOUT
     }
 }

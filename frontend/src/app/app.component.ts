@@ -2,36 +2,17 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavigationBarElement } from './shared/models/NavigationBarElement';
 import { RouterModule, RouterOutlet } from '@angular/router';
+import { FooterComponent } from './layout/footer/footer.component';
+import { HeaderComponent } from './layout/header/header.component';
+
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterModule, RouterOutlet],
+  imports: [CommonModule, RouterModule, RouterOutlet, FooterComponent, HeaderComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
   title = 'MyBlog';
-  navigationButtons: NavigationBarElement[] = [];
-
-  constructor() {
-    this.navigationButtons = [
-      {
-        href: '/',
-        label: 'Home',
-      },
-      {
-        href: '/explore',
-        label: 'Explore',
-      },
-      {
-        href: '/about',
-        label: 'About',
-      },
-      {
-        href: '/auth/login',
-        label: 'Login',
-      }
-    ];
-  }
 }

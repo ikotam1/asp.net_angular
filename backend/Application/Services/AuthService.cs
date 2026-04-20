@@ -15,15 +15,11 @@ namespace Application.Services;
 public partial class AuthService
 {
     private readonly PasswordHasher<User> _passwordHasher;
-
-    private readonly IAuthRepository _repository;
     private readonly IUserRepository _userRepository;
     private readonly IConfiguration _configuration;
 
-
     public AuthService(IAuthRepository repository, IUserRepository userRepository, IConfiguration config)
     {
-        _repository = repository;
         _userRepository = userRepository;
         _configuration = config;
         _passwordHasher = new();
@@ -34,7 +30,7 @@ public partial class AuthService
         // Check if user with email already exists
         var existingUser = await _userRepository.GetByEmail(dto.Email);
         if (existingUser != null)
-            return Result.Failure("User with this email already exists");
+            return ResultCreator.Failure("User with this email already exists");
 
         //  TODO: USE AUTO MAPPER
         var user = new User
@@ -45,9 +41,9 @@ public partial class AuthService
 
         user.PasswordHashed = _passwordHasher.HashPassword(user, dto.Password);
 
-        await _repository.Register(user);
+        await _userRepository.AddAsync(user);
 
-        return Result.Success();
+        return ResultCreator.Success();
     }
 
     public async Task<string?> Login(LoginRequest dto)
@@ -63,6 +59,8 @@ public partial class AuthService
             return null;
 
         var token = GenerateJwtToken(user);
+
+        // TODO: invalidate old tokens
         
         return token;
     }

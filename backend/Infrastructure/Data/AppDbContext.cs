@@ -7,6 +7,8 @@ public class AppDbContext : DbContext
 {
     public DbSet<User> Users { get; set; }
 
+    public DbSet<Post> Posts { get; set; }
+
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
     {
@@ -18,14 +20,6 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<User>()
-            .Property(u => u.Id)
-            .HasConversion(
-                v => v.ToString(),
-                v => Guid.Parse(v));
-
-        modelBuilder.Entity<User>()
-            .HasIndex(p => p.Email)
-            .IsUnique();
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
     }
 }

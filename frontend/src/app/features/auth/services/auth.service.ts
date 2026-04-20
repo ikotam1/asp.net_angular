@@ -26,7 +26,7 @@ export class AuthService {
         tap(response => {
           // // Store token and user
           localStorage.setItem(this.tokenKey, response.token);
-          // localStorage.setItem(this.userKey, JSON.stringify(response.user));
+          // localStorage.setItem(thcccis.userKey, JSON.stringify(response.user));
           // this.currentUserSubject.next(response.user);
         }),
         catchError(error => {

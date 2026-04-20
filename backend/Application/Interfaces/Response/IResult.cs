@@ -6,5 +6,5 @@ public interface IResult
 {
     bool IsSuccess { get; set; }
 
-    string? Error { get; set; }
+    string? Message { get; set; }
 }

@@ -1,0 +1,25 @@
+<header class="sticky top-0 z-50 w-full bg-white border-b shadow">
+  <div class="max-w-7xl mx-auto px-5">
+    <div class="flex items-center justify-between py-4 md:flex-row flex-col gap-4 md:gap-0">
+
+      <!-- Logo -->
+      <div class="logo">
+        <h1 class="text-2xl font-bold text-blue-600 m-0">
+          MyBlog
+        </h1>
+      </div>
+
+      <!-- Nav -->
+      <nav class="flex items-center gap-4 md:gap-8">
+        <a
+          *ngFor="let button of navigationButtons"
+          [routerLink]="button.href"
+          class="font-medium text-gray-800 hover:text-blue-600 transition-colors duration-300"
+        >
+          {{ button.label }}
+        </a>
+      </nav>
+
+    </div>
+  </div>
+</header>

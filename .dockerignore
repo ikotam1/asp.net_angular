@@ -12,7 +12,7 @@ obj/
 **/obj/
 
 # Ignore local secrets and environment files
-.env
+# .env
 *.user
 *.suo
 

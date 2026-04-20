@@ -1,7 +1,5 @@
-using System;
 using Application.DTOs;
 using Application.Interfaces;
-using Domain.Entities;
 
 namespace Application.Services;
 
@@ -16,7 +14,7 @@ public class UserService
 
     public async Task<List<UserDto>> GetUsers()
     {
-        var users = await _repository.GetAll();
+        var users = await _repository.GetAllAsync();
 
         return users.Select(u => new UserDto
         {

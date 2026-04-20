@@ -1,12 +1,10 @@
+using Application.Interfaces.common;
 using Domain.Entities;
+using Domain.Entities.common;
 
 namespace Application.Interfaces;
 
-public interface IUserRepository
+public interface IUserRepository : ICommonRepository<User>
 {
-    Task<List<User>> GetAll();
-
     Task<User?> GetByEmail(string email);
-
-    Task<User?> GetById(Guid id);
 }

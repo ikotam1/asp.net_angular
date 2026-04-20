@@ -46,7 +46,7 @@ html, body {
 }
 
 /* Header/Navbar */
-.header {
+/* .header {
   background-color: #ffffff;
   border-bottom: 1px solid var(--border-color);
   box-shadow: var(--shadow);
@@ -85,7 +85,7 @@ html, body {
 
 .nav-link:hover {
   color: var(--primary-color);
-}
+} */
 
 /* Buttons */
 .btn {
@@ -177,7 +177,7 @@ html, body {
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   .nav {
     gap: 1rem;
   }
@@ -186,4 +186,4 @@ html, body {
     flex-direction: column;
     gap: 1rem;
   }
-}
+} */

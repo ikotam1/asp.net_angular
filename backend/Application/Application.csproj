@@ -7,10 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\" />
     <Folder Include="DTOs\Request\" />
     <Folder Include="DTOs\Response\" />
     <Folder Include="Interfaces\" />
+    <Folder Include="Interfaces\common\" />
     <Folder Include="Interfaces\Response\" />
     <Folder Include="Mappings\" />
     <Folder Include="Services\" />
@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="1.1.0.118" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.9" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.17.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.17.0" />

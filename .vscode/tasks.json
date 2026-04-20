@@ -1,0 +1,59 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "EF: Add Migration",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "ef",
+                "migrations",
+                "add",
+                "${input:migrationName}",
+                "--startup-project",
+                "${workspaceFolder}/backend/MyBlog/Api.csproj",
+                "--project",
+                "${workspaceFolder}/backend/Infrastructure/Infrastructure.csproj"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "EF: Update Database",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "ef",
+                "database",
+                "update",
+                "${input:migrationName}",
+                "--startup-project",
+                "${workspaceFolder}/backend/MyBlog/Api.csproj",
+                "--project",
+                "${workspaceFolder}/backend/Infrastructure/Infrastructure.csproj"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "EF: Remove Migration",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "ef",
+                "migrations",
+                "remove",
+                "--startup-project",
+                "${workspaceFolder}/backend/MyBlog/Api.csproj",
+                "--project",
+                "${workspaceFolder}/backend/Infrastructure/Infrastructure.csproj"
+            ],
+            "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "id": "migrationName",
+            "type": "promptString",
+            "description": "Migration name"
+        }
+    ]
+}

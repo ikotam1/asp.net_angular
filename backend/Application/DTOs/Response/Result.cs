@@ -3,44 +3,41 @@ using Application.Interfaces.Response;
 
 namespace Application.DTOs.Response;
 
+public static class ResultCreator
+{
+    public static Result<T> Success<T>(T? value) => new Result<T>(true, value, null);
+
+    public static Result Success() => new Result(true, null);
+
+    public static Result Failure(string error) => new Result(false, error);
+}
+
 // Result pattern for API responses
 public class Result<T> : IResult
 {
     public bool IsSuccess { get; set; }
 
-    public string? Error { get; set; }
+    public string? Message { get; set; }
 
     public T? Value { get; }
 
-    private Result(bool success, T? value, string? error)
+    internal Result(bool success, T? value, string? error)
     {
         IsSuccess = success;
         Value = value;
-        Error = error;
+        Message = error;
     }
-
-    public static Result<T> Success(T value)
-        => new(true, value, null);
-
-    public static Result<T> Failure(string error)
-        => new(false, default, error);
 }
 
 public class Result : IResult
 {
     public bool IsSuccess { get; set; }
 
-    public string? Error { get; set; }
+    public string? Message { get; set; }
 
-    private Result(bool success, string? error)
+    internal Result(bool success, string? error)
     {
         IsSuccess = success;
-        Error = error;
+        Message = error;
     }
-
-    public static Result Success()
-        => new(true, null);
-
-    public static Result Failure(string error)
-        => new(false, error);
 }

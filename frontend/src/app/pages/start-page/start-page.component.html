@@ -1,11 +1,17 @@
 <div class="start-page">
   <!-- Hero Section -->
-  <section class="hero">
+  <section class="bg-gradient-to-br from-indigo-500 to-purple-600 text-white py-24 text-center">
     <div class="container">
-      <div class="hero-content">
-        <h2>Welcome to MyBlog</h2>
-        <p>Your platform for sharing ideas and connecting with readers worldwide</p>
-        <div class="hero-actions">
+      <div>
+        <h2 class="text-4xl font-bold mb-4">
+          Welcome to MyBlog
+        </h2>
+
+        <p class="text-lg mb-8 opacity-90">
+          Your platform for sharing ideas and connecting with readers worldwide
+        </p>
+
+        <div class="flex gap-4 justify-center flex-wrap">
           <button class="btn btn-primary btn-large">Start Reading</button>
           <button class="btn btn-secondary btn-large">Start Writing</button>
         </div>
@@ -14,33 +20,52 @@
   </section>
 
   <!-- Features Section -->
-  <section class="features">
+  <section class="py-16 bg-gray-100">
     <div class="container">
       <h3 class="section-title">What You Can Do</h3>
-      <div class="features-grid">
-        <div class="feature-card" *ngFor="let feature of features">
-          <div class="feature-icon">{{ feature.icon }}</div>
-          <h4>{{ feature.title }}</h4>
-          <p>{{ feature.description }}</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="card card-hover text-center" *ngFor="let feature of features">
+          <div class="text-4xl mb-4">
+            {{ feature.icon }}
+          </div>
+
+          <h4 class="text-xl font-semibold mb-2 text-gray-800">
+            {{ feature.title }}
+          </h4>
+
+          <p class="text-gray-500">
+            {{ feature.description }}
+          </p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Recent Posts Section -->
-  <section class="recent-posts">
+  <section class="py-16 bg-white">
     <div class="container">
       <h3 class="section-title">Recent Posts</h3>
-      <div class="posts-grid">
-        <article class="post-card" *ngFor="let i of [1,2,3,4]">
-          <div class="post-header">
-            <span class="post-category">Technology</span>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <article class="card border border-gray-200 hover:shadow-lg hover:-translate-y-1" *ngFor="let i of [1,2,3,4]">
+          <div class="mb-4">
+            <span class="bg-blue-600 text-white text-sm px-3 py-1 rounded-full font-semibold">
+              Technology
+            </span>
           </div>
-          <h4>Interesting Blog Post Title</h4>
-          <p>Discover compelling stories and insights shared by our community of writers...</p>
-          <div class="post-footer">
-            <span class="author">By Author Name</span>
-            <span class="date">2 days ago</span>
+
+          <h4 class="text-xl font-semibold mb-3 text-gray-800">
+            Interesting Blog Post Title
+          </h4>
+
+          <p class="text-gray-500 mb-4 text-sm">
+            Discover compelling stories and insights shared by our community...
+          </p>
+
+          <div class="flex justify-between text-sm text-gray-500 border-t pt-4">
+            <span>By Author Name</span>
+            <span>2 days ago</span>
           </div>
         </article>
       </div>

@@ -4,11 +4,11 @@ import { RouterModule } from '@angular/router';
 import { Feature } from '../../shared/models/Feature';
 
 @Component({
-  selector: 'app-start-page',
+  selector: 'main-content',
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './start-page.component.html',
-  styleUrls: ['./start-page.component.css']
+  styleUrls: ['./start-page.component.scss']
 })
 export class StartPageComponent {
   features: Feature[];
