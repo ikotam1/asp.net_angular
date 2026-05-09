@@ -1,23 +1,19 @@
-using Application.Common.Errors;
-using Application.Common.Extensions;
 using Application.DTOs.Post;
 using Application.DTOs.Request;
 using Application.Interfaces;
+using Application.Interfaces.Services;
 using Domain.Entities;
 using FluentResults;
 
 namespace Application.Services;
 
-public class PostService
+public class PostService : IPostService
 {
     private readonly IPostRepository _repository;
 
-    private readonly IUserRepository _userRepository;
-
-    public PostService(IPostRepository repository, IUserRepository userRepository)
+    public PostService(IPostRepository repository)
     {
         _repository = repository;
-        _userRepository = userRepository;
     }
 
     public async Task<Result<List<GetPostDto>>> GetAllPosts(GetPostsRequest request)

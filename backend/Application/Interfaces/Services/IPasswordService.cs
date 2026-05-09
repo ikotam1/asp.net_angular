@@ -1,6 +1,6 @@
 using Domain.Entities;
 
-namespace Application.Interfaces.Services;
+namespace Application.Interfaces.InfraServices;
 
 public interface IPasswordService
 {

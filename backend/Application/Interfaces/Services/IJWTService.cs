@@ -1,8 +1,8 @@
 using Domain.Entities;
 
-namespace Application.Interfaces.Services;
+namespace Application.Interfaces.InfraServices;
 
 public interface IJWTService
 {
-    string GenerateToken(User user, string jwtKey, int expired);
+    string GenerateToken(User user);
 }

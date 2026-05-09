@@ -1,5 +1,5 @@
 using Application.DTOs.Request;
-using Application.Services;
+using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,9 +10,9 @@ namespace Api.Controllers
     [Authorize]
     public class PostController : ControllerBase
     {
-        private readonly PostService _service;
+        private readonly IPostService _service;
 
-        public PostController(PostService service)
+        public PostController(IPostService service)
         {
             _service = service;
         }

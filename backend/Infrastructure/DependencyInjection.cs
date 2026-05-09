@@ -3,6 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using Microsoft.Extensions.Configuration;
+using Application.Common.Caching;
+using Infrastructure.Caching;
+using Infrastructure.Common.Interfaces;
 
 namespace Infrastructure;
 
@@ -22,13 +25,38 @@ public static class DependencyInjection
             options.UseNpgsql(connectionString);
         });
 
+        // Caching
+        var provider = configuration["Cache:Provider"];
+        if (provider == "Memory")
+        {
+            services.AddMemoryCache();
+            services.AddScoped<ICacheService, MemoryCache>();
+        }
+        else if (provider == "Redis")
+        {
+            // Register RedisCache and its dependencies here
+            services.AddScoped<ICacheService, RedisCache>();
+        }
+
         // Register repositories using reflection
+        var assembly = typeof(IInfrastructureMarker).Assembly;
+
         services.Scan(scan => scan
-            .FromAssemblies(Assembly.GetExecutingAssembly())
+            .FromAssemblies(assembly)
+
+            // Repositories
             .AddClasses(classes => classes
-                .InNamespaces("Infrastructure.Repositories"))
-                .AsImplementedInterfaces()
-                .WithScopedLifetime());
+                .InNamespaces("Infrastructure.Repositories")
+                .Where(type => type.Name.EndsWith("Repository")))
+            .AsImplementedInterfaces()
+            .WithScopedLifetime()
+
+            // Services
+            .AddClasses(classes => classes
+                .InNamespaces("Infrastructure.Services")
+                .Where(type => type.Name.EndsWith("Service")))
+            .AsImplementedInterfaces()
+            .WithScopedLifetime());
 
         return services;
     }

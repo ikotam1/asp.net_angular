@@ -11,7 +11,7 @@ import { ApiService } from '../../../core/services/api.service';
 export class AuthService {
   private tokenKey = 'auth_token';
   private userKey = 'auth_user';
-  private serviceUrl = 'Auth/'; // Base URL for auth endpoints
+  private serviceUrl = 'auth/'; // Base URL for auth endpoints
   
   // private currentUserSubject = new BehaviorSubject<User | null>(this.getUserFromStorage());
   // public currentUser$ = this.currentUserSubject.asObservable();

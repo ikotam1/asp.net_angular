@@ -5,13 +5,14 @@ using FluentResults;
 using Application.Common.Errors;
 using Application.Common.Extensions;
 using Application.Interfaces.Services;
+using Application.Interfaces.InfraServices;
 
 namespace Application.Services;
 
 public partial class AuthService(
     IUserRepository userRepository,
     IPasswordService passwordService,
-    IJWTService jwtService)
+    IJWTService jwtService) : IAuthService
 {
     private readonly IPasswordService _passwordService = passwordService;
 
@@ -52,7 +53,7 @@ public partial class AuthService(
         if (!isVerified)
             return null;
 
-        var token = _jwtService.GenerateToken(user, string.Empty, 0);
+        var token = _jwtService.GenerateToken(user);
 
         // TODO: invalidate old tokens
         

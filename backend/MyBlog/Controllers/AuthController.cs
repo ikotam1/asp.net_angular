@@ -1,4 +1,5 @@
 using Application.DTOs.Request;
+using Application.Interfaces.Services;
 using Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,9 +9,9 @@ namespace Api.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly AuthService _service;
+        private readonly IAuthService _service;
 
-        public AuthController(AuthService service)
+        public AuthController(IAuthService service)
         {
             _service = service;
         }

@@ -1,0 +1,11 @@
+namespace Application.Common.Caching;
+
+public interface ICacheService
+{
+    Task<T?> GetAsync<T>(string key);
+
+    Task SetAsync<T>(string key, T value, CacheOption options);
+    
+    Task RemoveAsync(string key);
+}
+

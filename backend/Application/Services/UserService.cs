@@ -1,10 +1,11 @@
 using Application.DTOs;
 using Application.Interfaces;
+using Application.Interfaces.Services;
 using FluentResults;
 
 namespace Application.Services;
 
-public class UserService
+public class UserService : IUserService
 {
     private readonly IUserRepository _repository;
 

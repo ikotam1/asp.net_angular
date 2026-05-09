@@ -7,12 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Common\Caching\" />
     <Folder Include="Common\Extensions\" />
     <Folder Include="Common\Helper\" />
     <Folder Include="DTOs\Request\" />
     <Folder Include="DTOs\Response\" />
-    <Folder Include="Interfaces\Response\" />
-    <Folder Include="Interfaces\Services\" />
     <Folder Include="Mappings\" />
     <Folder Include="Services\" />
   </ItemGroup>
