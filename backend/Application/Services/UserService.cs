@@ -1,5 +1,6 @@
 using Application.DTOs;
 using Application.Interfaces;
+using FluentResults;
 
 namespace Application.Services;
 
@@ -12,14 +13,14 @@ public class UserService
         _repository = repository;
     }
 
-    public async Task<List<UserDto>> GetUsers()
+    public async Task<Result<List<UserDto>>> GetUsers()
     {
         var users = await _repository.GetAllAsync();
 
-        return users.Select(u => new UserDto
+        return Result.Ok(users.Select(u => new UserDto
         {
             Name = u.Name,
             Email = u.Email
-        }).ToList();
+        }).ToList());
     }
 }

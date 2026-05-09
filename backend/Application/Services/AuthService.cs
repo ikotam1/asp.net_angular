@@ -1,36 +1,30 @@
-using System.Text;
 using Application.DTOs.Request;
 using Application.Interfaces;
 using Domain.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.Extensions.Configuration;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using Application.Interfaces.Response;
-using Application.DTOs.Response;
+using FluentResults;
+using Application.Common.Errors;
+using Application.Common.Extensions;
+using Application.Interfaces.Services;
 
 namespace Application.Services;
 
-public partial class AuthService
+public partial class AuthService(
+    IUserRepository userRepository,
+    IPasswordService passwordService,
+    IJWTService jwtService)
 {
-    private readonly PasswordHasher<User> _passwordHasher;
-    private readonly IUserRepository _userRepository;
-    private readonly IConfiguration _configuration;
+    private readonly IPasswordService _passwordService = passwordService;
 
-    public AuthService(IAuthRepository repository, IUserRepository userRepository, IConfiguration config)
-    {
-        _userRepository = userRepository;
-        _configuration = config;
-        _passwordHasher = new();
-    }
+    private readonly IJWTService _jwtService = jwtService;
 
-    public async Task<IResult> Register(RegisterRequest dto)
+    private readonly IUserRepository _userRepository = userRepository;
+
+    public async Task<Result> Register(RegisterRequest dto)
     {
         // Check if user with email already exists
         var existingUser = await _userRepository.GetByEmail(dto.Email);
         if (existingUser != null)
-            return ResultCreator.Failure("User with this email already exists");
+            return Result.Fail(UserErrors.EmailAlreadyExists.ToError());
 
         //  TODO: USE AUTO MAPPER
         var user = new User
@@ -39,11 +33,11 @@ public partial class AuthService
             Email = dto.Email
         };
 
-        user.PasswordHashed = _passwordHasher.HashPassword(user, dto.Password);
+        user.PasswordHashed = _passwordService.HashPassword(user, dto.Password);
 
         await _userRepository.AddAsync(user);
 
-        return ResultCreator.Success();
+        return Result.Ok();
     }
 
     public async Task<string?> Login(LoginRequest dto)
@@ -53,42 +47,15 @@ public partial class AuthService
         if (user == null)
             return null;
 
-        var result = VerifyPassword(user, dto.Password);
+        var isVerified = _passwordService.VerifyPassword(user, dto.Password);
 
-        if (result == PasswordVerificationResult.Failed)
+        if (!isVerified)
             return null;
 
-        var token = GenerateJwtToken(user);
+        var token = _jwtService.GenerateToken(user, string.Empty, 0);
 
         // TODO: invalidate old tokens
         
         return token;
-    }
-}
-
-public partial class AuthService
-{
-    private PasswordVerificationResult VerifyPassword(User user, string password)
-        => _passwordHasher.VerifyHashedPassword(user, user.PasswordHashed, password);
-
-    private string GenerateJwtToken(User user)
-    {
-        // TODO: GET KEY FROM CONFIG
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Jwt:Key").Value));
-        _ = int.TryParse(_configuration.GetSection("Jwt:Expired").Value, out var expired);      
-
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-        var token = new JwtSecurityToken(
-            claims:
-            [
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.Role.ToString())
-            ],
-            expires: DateTime.Now.AddHours(expired),
-            signingCredentials: creds);
-
-        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }

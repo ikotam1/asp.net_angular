@@ -12,11 +12,16 @@ public class PostRepository : CommonRepository<Post>, IPostRepository
     {
     }
 
-    public async Task<List<GetPostDto>?> GetPostsByAuthorId(Guid authorId)
+    public async Task<List<GetPostDto>> GetPostsByAuthorId(Guid authorId, bool asNoTracking = true)
     {
-        return await _context.Posts
+        IQueryable<Post> query = _context.Posts;
+        if (asNoTracking)
+        {
+            query = query.AsNoTracking();
+        }
+
+        return await query
             .Where(p => p.AuthorId == authorId)
-            .Include(p => p.Author)
             .Select(p => new GetPostDto
             {
                 Title = p.Title,

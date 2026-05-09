@@ -1,15 +1,14 @@
 using System.Security.Claims;
 using System.Text;
-using Application.Interfaces;
-using Application.Services;
-using Infrastructure.Repositories;
 using Infrastructure;
 using Microsoft.IdentityModel.Tokens;
+using Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add Infrastructure services to the container.
-builder.Services.AddInfrastructure(builder.Configuration.GetConnectionString("PostgresConnection")); 
+// Register services to the container.
+builder.Services.AddApplication()
+                .AddInfrastructure(builder.Configuration);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -38,14 +37,6 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
-
-// TODO: Auto add services and repositories by reflection
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IAuthRepository, AuthRepository>();
-builder.Services.AddScoped<IPostRepository, PostRepository>();
-builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<AuthService>();
-builder.Services.AddScoped<PostService>();
 
 builder.Services.AddControllers();
 
@@ -77,6 +68,9 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Configure routing
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -86,11 +80,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseExceptionHandler("/error"); // Global error handling, you can customize the error response in the /error endpoint
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
 app.MapControllers();
 
 app.UseAuthentication(); // UseAuthentication must before UseAuthorization
+// app.UseMiddleware<AuthenticationSessionMiddleware>();
+
 app.UseAuthorization();
 
 app.Run();

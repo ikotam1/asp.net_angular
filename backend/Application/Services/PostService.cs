@@ -1,8 +1,10 @@
+using Application.Common.Errors;
+using Application.Common.Extensions;
+using Application.DTOs.Post;
 using Application.DTOs.Request;
-using Application.DTOs.Response;
 using Application.Interfaces;
-using Application.Interfaces.Response;
 using Domain.Entities;
+using FluentResults;
 
 namespace Application.Services;
 
@@ -18,31 +20,24 @@ public class PostService
         _userRepository = userRepository;
     }
 
-    public async Task<IResult> GetAllPosts(GetPostsRequest request)
+    public async Task<Result<List<GetPostDto>>> GetAllPosts(GetPostsRequest request)
     {
         var posts = await _repository.GetPostsByAuthorId(request.AuthorId);
 
-        return ResultCreator.Success(posts);
+        return Result.Ok(posts);
     }
 
-    public async Task<IResult> CreatePost(CreatePostRequest request)
+    public async Task<Result> CreatePost(CreatePostRequest request)
     {
-        try
+        var post = new Post
         {
-            var post = new Post
-            {
-                Title = request.Title,
-                Content = request.Content,
-                AuthorId = request.AuthorId
-            };
+            Title = request.Title,
+            Content = request.Content,
+            AuthorId = request.AuthorId
+        };
 
-            await _repository.AddAsync(post);
+        await _repository.AddAsync(post);
 
-            return ResultCreator.Success(post.Id);
-        }
-        catch (Exception ex)
-        {
-            return ResultCreator.Failure(ex.Message);
-        }
+        return Result.Ok();
     }
 }

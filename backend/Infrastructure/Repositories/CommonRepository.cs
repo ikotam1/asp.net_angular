@@ -1,10 +1,12 @@
-using Application.Interfaces.common;
-using Domain.Entities.common;
+using Application.Interfaces;
+using Domain.Entities.Common;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
+// TODO: Implement specification pattern if there're many business queries
+// TODO: Implemet CQRS pattern if heavy read/write operations
 public abstract class CommonRepository<T> : ICommonRepository<T> where T : BaseEntity
 {
     protected readonly AppDbContext _context;
@@ -29,13 +31,27 @@ public abstract class CommonRepository<T> : ICommonRepository<T> where T : BaseE
         await _context.SaveChangesAsync();
     }
 
-    public async Task<List<T>> GetAllAsync()
+    public async Task<List<T>> GetAllAsync(bool asNoTracking = true)
     {
-        return await _context.Set<T>().ToListAsync();
+        IQueryable<T> query = _context.Set<T>();
+
+        if (asNoTracking)
+        {
+            query = query.AsNoTracking();
+        }
+
+        return await query.ToListAsync();
     }
 
-    public async Task<T?> GetByIdAsync(Guid id)
+    public async Task<T?> GetByIdAsync(Guid id, bool asNoTracking = true)
     {
-        return await _context.Set<T>().FirstOrDefaultAsync(e => e.Id == id);
+        IQueryable<T> query = _context.Set<T>();
+
+        if (asNoTracking)
+        {
+            query = query.AsNoTracking();
+        }
+
+        return await query.FirstOrDefaultAsync(e => e.Id == id);
     }
 }
