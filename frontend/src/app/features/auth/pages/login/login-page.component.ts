@@ -40,9 +40,8 @@ export class LoginPageComponent {
       this.errorMessage = null;
 
       this.authService.login(this.loginForm.value).subscribe({
-        next: (response) => {
-          localStorage.setItem('access_token', response.accessToken);
-          this.router.navigate(['']); // Adjust route as needed
+        next: () => {
+          this.router.navigate(['']);
         },
         error: (error) => {
           this.errorMessage = error.error?.message || 'Login failed. Please try again.';

@@ -36,8 +36,8 @@ namespace Api.Controllers
                 {
                     HttpOnly = true,
 #if DEBUG
-                    Secure = false,
-                    SameSite = SameSiteMode.Lax,
+                    Secure = true,
+                    SameSite = SameSiteMode.None,
 #else
                     Secure = true,
                     SameSite = SameSiteMode.None,
@@ -45,6 +45,15 @@ namespace Api.Controllers
                     Expires = DateTimeOffset.UtcNow.AddDays(10) // TODO: make it configurable
                 });
             }
+
+            return result.ToActionResult();
+        }
+
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshToken()
+        {
+            var refreshKey = Request.Cookies["refresh_token"] ?? string.Empty;
+            var result = await _service.RefreshToken(refreshKey);
 
             return result.ToActionResult();
         }

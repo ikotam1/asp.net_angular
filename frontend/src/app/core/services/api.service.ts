@@ -16,8 +16,8 @@ export class ApiService {
     return this.http.get<T>(`${this.apiUrl}${endpoint}`);
   }
 
-  post<T>(endpoint: string, data: any): Observable<T> {
-    return this.http.post<T>(`${this.apiUrl}${endpoint}`, data);
+  post<T>(endpoint: string, data: any, options?: any): Observable<T> {
+    return this.http.post<T>(`${this.apiUrl}${endpoint}`, data, { withCredentials: options?.withCredentials || false });
   }
 
   put<T>(endpoint: string, data: any): Observable<T> {

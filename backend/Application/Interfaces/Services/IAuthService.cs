@@ -9,4 +9,6 @@ public interface IAuthService
     Task<Result> Register(RegisterRequest dto);
 
     Task<Result<LoginResponse>> Login(LoginRequest dto);
+
+    Task<Result<LoginResponse>> RefreshToken(string refreshKey);
 }
