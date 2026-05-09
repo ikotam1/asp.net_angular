@@ -17,7 +17,7 @@ public class JWTService : IJWTService
         _configuration = configuration;
     }
 
-    public string GenerateToken(User user)
+    public string GenerateAccessToken(User user)
     {
         // TODO: GET KEY FROM CONFIG
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -31,7 +31,27 @@ public class JWTService : IJWTService
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.Role.ToString())
             ],
-            expires: DateTime.Now.AddHours(int.Parse(_configuration["Jwt:Expired"])),
+            expires: DateTime.Now.AddMinutes(int.Parse(_configuration["Jwt:AccessExpired"])),
+            signingCredentials: creds);
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    public string GenerateRefreshToken(User user)
+    {
+        // TODO: GET KEY FROM CONFIG
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var token = new JwtSecurityToken(
+            claims:
+            [
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.Role.ToString())
+            ],
+            expires: DateTime.Now.AddDays(int.Parse(_configuration["Jwt:RefreshExpired"])),
             signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);

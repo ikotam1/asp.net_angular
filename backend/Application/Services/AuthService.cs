@@ -6,6 +6,7 @@ using Application.Common.Errors;
 using Application.Common.Extensions;
 using Application.Interfaces.Services;
 using Application.Interfaces.InfraServices;
+using Application.DTOs.Response;
 
 namespace Application.Services;
 
@@ -41,22 +42,22 @@ public partial class AuthService(
         return Result.Ok();
     }
 
-    public async Task<string?> Login(LoginRequest dto)
+    public async Task<Result<LoginResponse>> Login(LoginRequest dto)
     {
         var user = await _userRepository.GetByEmail(dto.Email);
 
-        if (user == null)
-            return null;
+        if (user != null)
+        {
+            var isVerified = _passwordService.VerifyPassword(user, dto.Password);
 
-        var isVerified = _passwordService.VerifyPassword(user, dto.Password);
-
-        if (!isVerified)
-            return null;
-
-        var token = _jwtService.GenerateToken(user);
-
-        // TODO: invalidate old tokens
+            if (isVerified)
+            {
+                var accessToken = _jwtService.GenerateAccessToken(user);
+                var refreshToken = _jwtService.GenerateRefreshToken(user);
+                return Result.Ok(new LoginResponse { AccessToken = accessToken, RefreshToken = refreshToken });
+            }
+        }
         
-        return token;
+        return Result.Fail(UserErrors.InvalidCredentials.ToError());
     }
 }

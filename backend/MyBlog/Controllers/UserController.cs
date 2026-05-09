@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using Api.Common.Extensions;
 using Application.DTOs;
 using Application.Interfaces.Services;
 using Domain.Enums;
@@ -23,6 +25,15 @@ namespace MyBlog.Controllers
         {
             var users = await _service.GetUsers();
             return Ok(users);
+        }
+
+        [HttpGet("me")]
+        [Authorize]
+        public async Task<IActionResult> GetMe()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+            var result = await _service.GetCurrentUser(Guid.Parse(userId));
+            return result.ToActionResult();
         }
     }
 }

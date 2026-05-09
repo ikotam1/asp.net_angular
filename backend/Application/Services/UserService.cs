@@ -1,3 +1,5 @@
+using Application.Common.Errors;
+using Application.Common.Extensions;
 using Application.DTOs;
 using Application.Interfaces;
 using Application.Interfaces.Services;
@@ -12,6 +14,22 @@ public class UserService : IUserService
     public UserService(IUserRepository repository)
     {
         _repository = repository;
+    }
+
+    public async Task<Result<UserDto>> GetCurrentUser(Guid userId)
+    {
+        var user = await _repository.GetByIdAsync(userId);
+
+        if (user != null)
+        {
+            return Result.Ok(new UserDto
+            {
+                Name = user.Name,
+                Email = user.Email
+            });
+        }
+        
+        return Result.Fail(UserErrors.UserNotFound.ToError());
     }
 
     public async Task<Result<List<UserDto>>> GetUsers()

@@ -12,8 +12,7 @@ export interface SignupRequest {
 }
 
 export interface LoginResponse {
-  token: string;
-  user: User;
+  accessToken: string;
 }
 
 export interface SignupResponse {

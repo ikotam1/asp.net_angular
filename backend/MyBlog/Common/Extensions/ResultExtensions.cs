@@ -1,3 +1,4 @@
+using Application.Common.Errors;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -5,11 +6,13 @@ namespace Api.Common.Extensions;
 
 public static class ResultExtension
 {
-    public static IActionResult ToActionResult<T>(this Result<T> result)
+    public static IActionResult ToActionResult<T>(this Result<T> result, bool noContentOnSuccess = false)
     {
         if (result.IsSuccess)
         {
-            return new OkObjectResult(result.Value);
+            return noContentOnSuccess 
+                ? new NoContentResult()
+                : new OkObjectResult(result.Value);
         }
 
         var error = result.Errors.FirstOrDefault();
@@ -17,8 +20,9 @@ public static class ResultExtension
         {
             return code switch
             {
-                "User.NotFound" => new NotFoundObjectResult(error.Message),
-                "Post.CreateFailed" => new BadRequestObjectResult(error.Message),
+                UserErrors.NotFoundCode => new NotFoundObjectResult(error.Message),
+                UserErrors.InvalidCredentialsCode => new UnauthorizedResult(),
+                UserErrors.EmailAlreadyExistsCode => new ConflictObjectResult(error.Message),
                 _ => new ObjectResult(error.Message) { StatusCode = 500 }
             };
         }

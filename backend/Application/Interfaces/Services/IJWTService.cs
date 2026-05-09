@@ -4,5 +4,7 @@ namespace Application.Interfaces.InfraServices;
 
 public interface IJWTService
 {
-    string GenerateToken(User user);
+    string GenerateAccessToken(User user);
+
+    string GenerateRefreshToken(User user);
 }

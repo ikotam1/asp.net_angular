@@ -29,7 +29,6 @@ export class LoginPageComponent {
 
   ngOnInit() {
     const state = history.state;
-    console.log(state);
     if (state?.email) {
       this.loginForm.patchValue({ email: state.email });
     }
@@ -42,14 +41,14 @@ export class LoginPageComponent {
 
       this.authService.login(this.loginForm.value).subscribe({
         next: (response) => {
-          console.log('Login successful:', response);
-          this.isLoading = false;
-          this.router.navigate(['/dashboard']); // Adjust route as needed
+          localStorage.setItem('access_token', response.accessToken);
+          this.router.navigate(['']); // Adjust route as needed
         },
         error: (error) => {
-          console.error('Login failed:', error);
-          this.isLoading = false;
           this.errorMessage = error.error?.message || 'Login failed. Please try again.';
+        },
+        complete: () => {
+          this.isLoading = false;
         }
       });
     }
