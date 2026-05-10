@@ -23,6 +23,7 @@ public static class ResultExtension
                 UserErrors.NotFoundCode => new NotFoundObjectResult(error.Message),
                 UserErrors.InvalidCredentialsCode => new UnauthorizedResult(),
                 UserErrors.EmailAlreadyExistsCode => new ConflictObjectResult(error.Message),
+                PostErrors.PostNotFoundCode => new NotFoundObjectResult(error.Message),
                 _ => new ObjectResult(error.Message) { StatusCode = 500 }
             };
         }

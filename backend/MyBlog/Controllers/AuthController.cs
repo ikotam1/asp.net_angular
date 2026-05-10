@@ -35,9 +35,10 @@ namespace Api.Controllers
                 Response.Cookies.Append("refresh_token", result.Value.RefreshToken, new CookieOptions
                 {
                     HttpOnly = true,
+                    Path = "/api/auth/refresh-token",
 #if DEBUG
                     Secure = true,
-                    SameSite = SameSiteMode.None,
+                    SameSite = SameSiteMode.Strict,
 #else
                     Secure = true,
                     SameSite = SameSiteMode.None,

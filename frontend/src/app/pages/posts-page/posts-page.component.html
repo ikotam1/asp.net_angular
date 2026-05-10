@@ -1,4 +1,47 @@
 <section class="page-page posts-page">
-  <h2>Posts</h2>
-  <p>Browse the latest posts from the blog.</p>
+  <div class="posts-page__create">
+    <h2>Đăng bài viết mới</h2>
+
+    <form (ngSubmit)="submitPost()" class="post-form">
+      <label>
+        Tiêu đề
+        <input
+          type="text"
+          name="title"
+          [(ngModel)]="newPost.title"
+          required
+          placeholder="Nhập tiêu đề bài viết"
+        />
+      </label>
+
+      <label>
+        Nội dung
+        <textarea
+          name="content"
+          [(ngModel)]="newPost.content"
+          rows="6"
+          required
+          placeholder="Viết nội dung bài viết của bạn"
+        ></textarea>
+      </label>
+
+      <button type="submit" [disabled]="isSubmitting || !newPost.title.trim() || !newPost.content.trim()">
+        {{ isSubmitting ? 'Đang đăng...' : 'Đăng bài' }}
+      </button>
+    </form>
+
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+  </div>
+
+  <div class="posts-page__list">
+    <div *ngIf="isLoading" class="loading">Đang tải bài viết...</div>
+    <div *ngIf="!isLoading && posts.length === 0" class="empty">Bạn chưa có bài viết nào.</div>
+
+    <article class="post-card" *ngFor="let post of posts" [routerLink]="['/post', post.id]">
+      <h3>{{ post.title }}</h3>
+      <p class="meta">Tác giả: {{ post.authorName }}</p>
+      <p>{{ post.content }}</p>
+      <span class="link-label">Xem chi tiết →</span>
+    </article>
+  </div>
 </section>

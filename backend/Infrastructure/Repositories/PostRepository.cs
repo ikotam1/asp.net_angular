@@ -24,6 +24,7 @@ public class PostRepository : CommonRepository<Post>, IPostRepository
             .Where(p => p.AuthorId == authorId)
             .Select(p => new GetPostDto
             {
+                Id = p.Id,
                 Title = p.Title,
                 Content = p.Content,
                 AuthorName = p.Author!.Name

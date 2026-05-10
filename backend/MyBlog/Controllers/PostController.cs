@@ -18,6 +18,14 @@ namespace Api.Controllers
         {
             _service = service;
         }
+
+        [HttpGet("{postId}")]
+        public async Task<IActionResult> Get(string postId)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+            var post = await _service.GetPostById(Guid.Parse(userId), Guid.Parse(postId));
+            return post.ToActionResult();
+        }
     
         [HttpGet]
         public async Task<IActionResult> GetAll()

@@ -1,0 +1,17 @@
+<section class="page-page post-detail-page">
+  <div class="detail-header">
+    <button class="back-button" type="button" (click)="goBack()">← Quay lại</button>
+    <h2>Chi tiết bài viết</h2>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">Đang tải nội dung bài viết...</div>
+  <div *ngIf="!isLoading && errorMessage" class="error-message">{{ errorMessage }}</div>
+
+  <article *ngIf="post" class="post-detail-card">
+    <h3>{{ post.title }}</h3>
+    <p class="meta">Tác giả: {{ post.authorName }}</p>
+    <div class="content">
+      <p>{{ post.content }}</p>
+    </div>
+  </article>
+</section>

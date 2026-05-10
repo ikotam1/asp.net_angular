@@ -1,0 +1,55 @@
+.post-detail-page {
+  padding: 1.5rem;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.detail-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.back-button {
+  background: transparent;
+  border: none;
+  color: #2563eb;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 0.5rem 0.75rem;
+}
+
+.back-button:hover {
+  text-decoration: underline;
+}
+
+.post-detail-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+}
+
+.post-detail-card h3 {
+  margin: 0 0 0.85rem;
+}
+
+.post-detail-card .meta {
+  margin: 0 0 1.25rem;
+  color: #6b7280;
+}
+
+.post-detail-card .content {
+  line-height: 1.8;
+  color: #374151;
+}
+
+.loading,
+.error-message {
+  color: #6b7280;
+}
+
+.error-message {
+  color: #b91c1c;
+}
