@@ -4,6 +4,7 @@ import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@a
 
 import { routes } from './app.routes';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { UnauthorizeInterceptor } from './core/interceptors/unauthorize.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -11,6 +12,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptorsFromDi(),
     ),
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: UnauthorizeInterceptor, multi: true },
   ]
 };

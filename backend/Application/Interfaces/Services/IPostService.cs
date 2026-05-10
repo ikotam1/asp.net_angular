@@ -6,7 +6,7 @@ namespace Application.Interfaces.Services;
 
 public interface IPostService
 {
-    Task<Result<List<GetPostDto>>> GetAllPosts(GetPostsRequest request);
+    Task<Result<List<GetPostDto>>> GetAllPosts(Guid authorId);
 
     Task<Result> CreatePost(CreatePostRequest request);
 }

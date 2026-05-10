@@ -41,7 +41,7 @@ export class LoginPageComponent {
 
       this.authService.login(this.loginForm.value).subscribe({
         next: () => {
-          this.router.navigate(['']);
+          this.router.navigate(['/posts']);
         },
         error: (error) => {
           this.errorMessage = error.error?.message || 'Login failed. Please try again.';

@@ -16,9 +16,9 @@ public class PostService : IPostService
         _repository = repository;
     }
 
-    public async Task<Result<List<GetPostDto>>> GetAllPosts(GetPostsRequest request)
+    public async Task<Result<List<GetPostDto>>> GetAllPosts(Guid authorId)
     {
-        var posts = await _repository.GetPostsByAuthorId(request.AuthorId);
+        var posts = await _repository.GetPostsByAuthorId(authorId);
 
         return Result.Ok(posts);
     }

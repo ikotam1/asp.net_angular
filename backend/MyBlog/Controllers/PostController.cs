@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using Api.Common.Extensions;
 using Application.DTOs.Request;
 using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -18,15 +20,18 @@ namespace Api.Controllers
         }
     
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] GetPostsRequest request)
+        public async Task<IActionResult> GetAll()
         {
-            var posts = await _service.GetAllPosts(request);
-            return Ok(posts);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+            var posts = await _service.GetAllPosts(Guid.Parse(userId));
+            return posts.ToActionResult();
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreatePostRequest request)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+            request.AuthorId = Guid.Parse(userId);
             var result = await _service.CreatePost(request);
 
             if (!result.IsSuccess)

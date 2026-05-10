@@ -1,3 +1,5 @@
-export interface GetPostsRequest {
-  userId: string;
+export interface GetPostsResponse {
+  title: string;
+  content: string;
+  authorName: string;
 }

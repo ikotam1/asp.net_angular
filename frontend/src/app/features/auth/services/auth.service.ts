@@ -9,14 +9,18 @@ import { ApiService } from '../../../core/services/api.service';
 export class AuthService {
   private serviceUrl = 'auth/'; // Base URL for auth endpoints
   private userServiceUrl = 'user/'; // Base URL for user-related endpoints
-  private token = '';
+  private token : string | null = null;
 
   private setToken(token: string) {
     this.token = token;
   }
 
-  getToken(): string {
+  getToken(): string | null {
     return this.token;
+  }
+
+  clearToken(): void {
+    this.token = null;
   }
 
   constructor(private apiService: ApiService) {
@@ -48,20 +52,14 @@ export class AuthService {
         withCredentials: true,
       }
     ).pipe(
-        map((response) => {
-          this.setToken(response.accessToken);
-          return response;
-        })
-      );
+      map((response) => {
+        this.setToken(response.accessToken);
+        return response;
+      })
+    );
   }
 
   isAuthenticated(): Observable<boolean> {
-    // Implement logic to check if the user is authenticated
-    return this.apiService.get(
-      `${this.userServiceUrl}me`,
-    ).pipe(
-      map(() => true),
-      catchError(() => of(false))
-    );
+    return this.getToken() ? of(true) : of(false);
   }
 }

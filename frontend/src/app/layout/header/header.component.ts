@@ -20,6 +20,10 @@ export class HeaderComponent {
         label: 'Home',
       },
       {
+        href: '/posts',
+        label: 'My Wall',
+      },
+      {
         href: '/explore',
         label: 'Explore',
       },
