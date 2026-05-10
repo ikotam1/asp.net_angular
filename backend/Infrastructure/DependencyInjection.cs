@@ -35,6 +35,10 @@ public static class DependencyInjection
         else if (provider == "Redis")
         {
             // Register RedisCache and its dependencies here
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = configuration.GetConnectionString("RedisConnection");
+            });
             services.AddScoped<ICacheService, RedisCache>();
         }
 

@@ -1,21 +1,36 @@
+using System.Text.Json;
 using Application.Common.Caching;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace Infrastructure.Caching;
 
 public class RedisCache : ICacheService
 {
-    public Task<T?> GetAsync<T>(string key)
+    private readonly IDistributedCache _cache;
+
+    public RedisCache(IDistributedCache cache)
     {
-        throw new NotImplementedException();
+        _cache = cache;
     }
 
-    public Task RemoveAsync(string key)
+    public async Task<T?> GetAsync<T>(string key)
     {
-        throw new NotImplementedException();
+        var value = await _cache.GetStringAsync(key);
+        return value == null ? default : JsonSerializer.Deserialize<T>(value);
     }
 
-    public Task SetAsync<T>(string key, T value, CacheOption options)
+    public async Task RemoveAsync(string key)
     {
-        throw new NotImplementedException();
+        await _cache.RemoveAsync(key);
+    }
+
+    public async Task SetAsync<T>(string key, T value, CacheOption options)
+    {
+        var json = JsonSerializer.Serialize(value);
+        await _cache.SetStringAsync(key, json, new DistributedCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = options.AbsoluteExpirationRelativeToNow,
+            SlidingExpiration = options.SlidingExpiration
+        });
     }
 }
